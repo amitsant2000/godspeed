@@ -4,13 +4,16 @@ var mouse ={};
 var socket = io('http://localhost:3000/');
 var username = prompt('Enter Username:')
 var color = prompt('Enter Color:')
+webgazer.begin();
 socket.on('connect', function() {
   console.log('connected')
+
   var opponents = [];
   function Player(image,color,username,mover) {
     this.username = username;
     this.color = color;
     this.health=10;
+
     this.mover = {user:username,x:0,y:0,currx:0,curry:0,first:true,mx:mouse.x,my:mouse.y}
     this.start = function(){
       var a = Math.floor(Math.random()*window.innerWidth)
@@ -175,7 +178,12 @@ socket.on('connect', function() {
   z.start()
   function animate(){
 
-
+    var prediction = webgazer.getCurrentPrediction();
+    if (prediction) {
+        var x = prediction.x;
+        var y = prediction.y;
+        console.log(x,y);
+    }
     z.update();
     for(var n = 0; n<bullets.length;n++){
       bullets[n].update()
