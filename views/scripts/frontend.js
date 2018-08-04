@@ -4,7 +4,17 @@ var mouse ={};
 var socket = io('http://localhost:3000/');
 var username = prompt('Enter Username:')
 var color = prompt('Enter Color:')
-webgazer.begin();
+webgazer.setGazeListener(function(data, elapsedTime) {
+    if (data == null) {
+        return;
+    }
+    var c = canvas.getContext('2d');
+    z.mover.mx= data.x; //these x coordinates are relative to the viewport
+    z.mover.my = data.y; //these y coordinates are relative to the viewport
+     //elapsed time is based on time since begin was called
+    c.rect(z.mover.mx,z.mover.my,100,100);
+    c.stroke();
+}).begin();
 socket.on('connect', function() {
   console.log('connected')
 
@@ -14,7 +24,7 @@ socket.on('connect', function() {
     this.color = color;
     this.health=10;
 
-    this.mover = {user:username,x:0,y:0,currx:0,curry:0,first:true,mx:mouse.x,my:mouse.y}
+    this.mover = {user:username,x:0,y:0,currx:0,curry:0,first:true,mx:0,my:0}
     this.start = function(){
       var a = Math.floor(Math.random()*window.innerWidth)
       var b =Math.floor(Math.random()*window.innerHeight)
@@ -27,8 +37,6 @@ socket.on('connect', function() {
     this.update = function(){
       this.mover.currx = this.mover.currx+ this.mover.x;
       this.mover.curry = this.mover.curry+ this.mover.y;
-      this.mover.mx = mouse.x;
-      this.mover.my = mouse.y;
       drawImageRot(image, this.mover.currx,this.mover.curry, image.width, image.height,this.mover.mx,this.mover.my);
       socket.emit('sendme',this)
     }
@@ -157,7 +165,7 @@ socket.on('connect', function() {
     }
   })
   window.addEventListener('click',function(event){
-    var a = new Bullet(z,z.mover.currx+50,z.mover.curry+37,mouse.x,mouse.y,opponents)
+    var a = new Bullet(z,z.mover.currx+50,z.mover.curry+37,z.mover.mx,z.mover.my,opponents)
     a.start();
     bullets.push(a);
   })
@@ -165,7 +173,7 @@ socket.on('connect', function() {
 
   window.addEventListener('contextmenu',function(event){
     event.preventDefault()
-    var a = new Bullet(z,z.mover.currx+50,z.mover.curry+37,mouse.x,mouse.y,opponents)
+    var a = new Bullet(z,z.mover.currx+50,z.mover.curry+37,z.mover.mx,z.mover.my,opponents)
     a.start();
     bullets.push(a);
   })
@@ -178,12 +186,7 @@ socket.on('connect', function() {
   z.start()
   function animate(){
 
-    var prediction = webgazer.getCurrentPrediction();
-    if (prediction) {
-        var x = prediction.x;
-        var y = prediction.y;
-        console.log(x,y);
-    }
+
     z.update();
     for(var n = 0; n<bullets.length;n++){
       bullets[n].update()
