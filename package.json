@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "morgan": "^1.9.0",
+    "path": "^0.12.7",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "socket.io": "^2.1.1"
+  },
+  "name": "dark-hackathon-winning-team-repo",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amitsant2000/dark-hackathon-winning-team-repo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amitsant2000/dark-hackathon-winning-team-repo/issues"
+  },
+  "homepage": "https://github.com/amitsant2000/dark-hackathon-winning-team-repo#readme"
+}
